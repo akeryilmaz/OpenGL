@@ -129,7 +129,7 @@ int main(int argc, char * argv[]) {
   glUniformMatrix4fv(PLocation, 1, GL_FALSE, glm::value_ptr(projection));
 
   cameraPositionLocation = glGetUniformLocation(idProgramShader, "cameraPosition");
-  glUniform4f(cameraPositionLocation, cameraPosition.x, cameraPosition.y, cameraPosition.z, 1.0);
+  glUniform3f(cameraPositionLocation, cameraPosition.x, cameraPosition.y, cameraPosition.z);
   heightFactorLocation = glGetUniformLocation(idProgramShader, "heightFactor");
   glUniform1f(heightFactorLocation, heightFactor);
   heightLocation = glGetUniformLocation(idProgramShader, "heightTexture");
@@ -149,9 +149,7 @@ int main(int argc, char * argv[]) {
     glm::mat4 view = glm::mat4(1.0f);
     view = glm::lookAt(cameraPosition, cameraPosition + cameraGaze, cameraUp);
     glUniformMatrix4fv(MVLocation, 1, GL_FALSE, glm::value_ptr(view));
-    glUniform4f(cameraPositionLocation, cameraPosition.x, cameraPosition.y, cameraPosition.z, 1.0);
-    glUniform1f(heightFactorLocation, heightFactor);
-    glUniform4f(cameraPositionLocation, cameraPosition.x, cameraPosition.y, cameraPosition.z, 1.0);
+    glUniform3f(cameraPositionLocation, cameraPosition.x, cameraPosition.y, cameraPosition.z);
     glUniform1f(heightFactorLocation, heightFactor);
     glUniform1i(heightLocation, heightTexture);
     glUniform1i(widthLocation, widthTexture);
