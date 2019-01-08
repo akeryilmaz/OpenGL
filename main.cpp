@@ -24,6 +24,8 @@ glm::vec3 cameraGaze(0.0,0.0,1.0);
 glm::vec3 cameraUp(0.0,1.0,0.0);
 float cameraVelocity = 0;
 GLfloat heightFactor = 10.0;
+float pitch = 0;
+float yaw = 90.0f;
 
 int widthTexture, heightTexture;
 vector<float> vertices;
@@ -43,6 +45,38 @@ void processInput(GLFWwindow *window)
     cameraVelocity += 0.5;
   if(glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
     cameraVelocity -= 0.5;
+  if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS){
+    pitch += 0.05;
+    glm::vec3 newGaze;
+    newGaze.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
+    newGaze.y = sin(glm::radians(pitch));
+    newGaze.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
+    cameraGaze = glm::normalize(newGaze);
+  }
+  if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS){
+    pitch -= 0.05;
+    glm::vec3 newGaze;
+    newGaze.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
+    newGaze.y = sin(glm::radians(pitch));
+    newGaze.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
+    cameraGaze = glm::normalize(newGaze);
+  }
+  if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS){
+    yaw += 0.05;
+    glm::vec3 newGaze;
+    newGaze.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
+    newGaze.y = sin(glm::radians(pitch));
+    newGaze.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
+    cameraGaze = glm::normalize(newGaze);
+  }
+  if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS){
+    yaw -= 0.05;
+    glm::vec3 newGaze;
+    newGaze.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
+    newGaze.y = sin(glm::radians(pitch));
+    newGaze.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
+    cameraGaze = glm::normalize(newGaze);
+  }
   if(glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
     GLFWwindow* window = glfwCreateWindow(widthTexture, heightTexture, "CENG477 - HW3", glfwGetPrimaryMonitor(), NULL);
 }
@@ -67,7 +101,7 @@ int main(int argc, char * argv[]) {
   initShaders();
   initTexture(argv[1], & widthTexture, & heightTexture);
 
-  window = glfwCreateWindow(widthTexture, heightTexture, "CENG477 - HW3", NULL, NULL);
+  window = glfwCreateWindow(600, 600, "CENG477 - HW3", NULL, NULL);
 
   if (!window) {
     glfwTerminate();
