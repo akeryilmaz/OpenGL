@@ -35,8 +35,16 @@ static void errorCallback(int error,
 
 void processInput(GLFWwindow *window)
 {
-  if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    glfwSetWindowShouldClose(window, true);
+  if(glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
+    heightFactor += 0.5;
+  if(glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
+    heightFactor -= 0.5;
+  if(glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS)
+    cameraVelocity += 0.5;
+  if(glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
+    cameraVelocity -= 0.5;
+  if(glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
+    GLFWwindow* window = glfwCreateWindow(widthTexture, heightTexture, "CENG477 - HW3", glfwGetPrimaryMonitor(), NULL);
 }
 
 int main(int argc, char * argv[]) {
@@ -56,7 +64,10 @@ int main(int argc, char * argv[]) {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 
-  window = glfwCreateWindow(600, 600, "CENG477 - HW3", NULL, NULL);
+  initShaders();
+  initTexture(argv[1], & widthTexture, & heightTexture);
+
+  window = glfwCreateWindow(widthTexture, heightTexture, "CENG477 - HW3", NULL, NULL);
 
   if (!window) {
     glfwTerminate();
@@ -72,8 +83,6 @@ int main(int argc, char * argv[]) {
     exit(-1);
   }
 
-  initShaders();
-  initTexture(argv[1], & widthTexture, & heightTexture);
 
   vertices.resize(18*widthTexture*heightTexture); //SHOULD BE INITIALIZED
 
@@ -114,7 +123,8 @@ int main(int argc, char * argv[]) {
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
   glEnableVertexAttribArray(0);
 
-  glViewport(0, 0, 600, 600);
+  glViewport(0, 0, widthTexture, heightTexture);
+  glEnable(GL_DEPTH_TEST);
 
   cameraPosition = glm::vec3((float)widthTexture/2, (float)widthTexture/10, -(float)widthTexture/4);
   glm::mat4 view = glm::mat4(1.0f);
@@ -140,6 +150,8 @@ int main(int argc, char * argv[]) {
   while (!glfwWindowShouldClose(window)) {
 
     processInput(window);
+
+    cameraPosition += cameraGaze * cameraVelocity;
 
     glClear(GL_COLOR_BUFFER_BIT);
     glClear(GL_DEPTH_BUFFER_BIT);
