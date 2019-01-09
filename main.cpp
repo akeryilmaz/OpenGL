@@ -52,36 +52,60 @@ void processInput(GLFWwindow *window)
   if(glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
     cameraVelocity -= 0.05;
   if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS){
-    pitch += 0.20;
+    pitch += 0.4;
+    if (pitch>360) pitch = pitch-360.0f;
     glm::vec3 newGaze;
+    glm::vec3 newUp;
     newGaze.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
     newGaze.y = sin(glm::radians(pitch));
     newGaze.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
+    newUp.x = sin(glm::radians(pitch)) * cos(glm::radians(yaw));
+    newUp.y = cos(glm::radians(pitch));
+    newUp.z = sin(glm::radians(pitch)) * sin(glm::radians(yaw));
     cameraGaze = glm::normalize(newGaze);
+    cameraUp = glm::normalize(newUp);
   }
   if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS){
-    pitch -= 0.20;
+    pitch -= 0.4;
+    if (pitch<0) pitch = pitch+360.0f;
     glm::vec3 newGaze;
+    glm::vec3 newUp;
     newGaze.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
     newGaze.y = sin(glm::radians(pitch));
     newGaze.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
+    newUp.x = sin(glm::radians(pitch)) * cos(glm::radians(yaw));
+    newUp.y = cos(glm::radians(pitch));
+    newUp.z = sin(glm::radians(pitch)) * sin(glm::radians(yaw));
     cameraGaze = glm::normalize(newGaze);
+    cameraUp = glm::normalize(newUp);
   }
   if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS){
-    yaw += 0.2;
+    yaw += 0.4;
+    if (yaw>360) yaw = yaw-360.0f;
     glm::vec3 newGaze;
+    glm::vec3 newUp;
     newGaze.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
     newGaze.y = sin(glm::radians(pitch));
     newGaze.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
+    newUp.x = sin(glm::radians(pitch)) * cos(glm::radians(yaw));
+    newUp.y = cos(glm::radians(pitch));
+    newUp.z = sin(glm::radians(pitch)) * sin(glm::radians(yaw));
     cameraGaze = glm::normalize(newGaze);
+    cameraUp = glm::normalize(newUp);
   }
   if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS){
-    yaw -= 0.2;
+    yaw -= 0.4;
+    if (yaw<0) yaw = yaw+360.0f;
     glm::vec3 newGaze;
+    glm::vec3 newUp;
     newGaze.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
     newGaze.y = sin(glm::radians(pitch));
     newGaze.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
+    newUp.x = sin(glm::radians(pitch)) * cos(glm::radians(yaw));
+    newUp.y = cos(glm::radians(pitch));
+    newUp.z = sin(glm::radians(pitch)) * sin(glm::radians(yaw));
     cameraGaze = glm::normalize(newGaze);
+    cameraUp = glm::normalize(newUp);
   }
   if(glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS){
     GLFWmonitor* monitor = glfwGetWindowMonitor(window);
@@ -170,10 +194,10 @@ int main(int argc, char * argv[]) {
 
   glEnable(GL_DEPTH_TEST);
 
-  cameraPosition = glm::vec3((float)widthTexture/(float)2, (float)widthTexture/(float)10, -(float)widthTexture/(float)3);
+  cameraPosition = glm::vec3((float)widthTexture/(float)2, (float)widthTexture/(float)10, -(float)widthTexture/(float)4);
   glm::mat4 view = glm::mat4(1.0f);
   glm::mat4 projection;
-  projection = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 1000.0f);
+  projection = glm::perspective(45.0f, 1.0f, 0.1f, 1000.0f);
 
   glUseProgram(idProgramShader);
 
