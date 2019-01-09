@@ -26,6 +26,7 @@ float cameraVelocity = 0;
 GLfloat heightFactor = 10.0;
 float pitch = 0;
 float yaw = 90.0f;
+int width=600, height=600;
 
 int widthTexture, heightTexture;
 vector<float> vertices;
@@ -35,6 +36,11 @@ static void errorCallback(int error,
   fprintf(stderr, "Error: %s\n", description);
 }
 
+void window_size_callback(GLFWwindow* window, int width, int height)
+{
+  glViewport(0, 0, width, height);
+}
+
 void processInput(GLFWwindow *window)
 {
   if(glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
@@ -42,11 +48,11 @@ void processInput(GLFWwindow *window)
   if(glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
     heightFactor -= 0.5;
   if(glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS)
-    cameraVelocity += 0.5;
+    cameraVelocity += 0.05;
   if(glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
-    cameraVelocity -= 0.5;
+    cameraVelocity -= 0.05;
   if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS){
-    pitch += 0.05;
+    pitch += 0.20;
     glm::vec3 newGaze;
     newGaze.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
     newGaze.y = sin(glm::radians(pitch));
@@ -54,15 +60,7 @@ void processInput(GLFWwindow *window)
     cameraGaze = glm::normalize(newGaze);
   }
   if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS){
-    pitch -= 0.05;
-    glm::vec3 newGaze;
-    newGaze.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
-    newGaze.y = sin(glm::radians(pitch));
-    newGaze.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
-    cameraGaze = glm::normalize(newGaze);
-  }
-  if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS){
-    yaw += 0.05;
+    pitch -= 0.20;
     glm::vec3 newGaze;
     newGaze.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
     newGaze.y = sin(glm::radians(pitch));
@@ -70,15 +68,29 @@ void processInput(GLFWwindow *window)
     cameraGaze = glm::normalize(newGaze);
   }
   if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS){
-    yaw -= 0.05;
+    yaw += 0.2;
     glm::vec3 newGaze;
     newGaze.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
     newGaze.y = sin(glm::radians(pitch));
     newGaze.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
     cameraGaze = glm::normalize(newGaze);
   }
-  if(glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
-    GLFWwindow* window = glfwCreateWindow(widthTexture, heightTexture, "CENG477 - HW3", glfwGetPrimaryMonitor(), NULL);
+  if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS){
+    yaw -= 0.2;
+    glm::vec3 newGaze;
+    newGaze.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
+    newGaze.y = sin(glm::radians(pitch));
+    newGaze.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
+    cameraGaze = glm::normalize(newGaze);
+  }
+  if(glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS){
+    GLFWmonitor* monitor = glfwGetWindowMonitor(window);
+    if(monitor == NULL) {
+      monitor = glfwGetPrimaryMonitor();
+      const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+      glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+    }
+  }
 }
 
 int main(int argc, char * argv[]) {
@@ -98,10 +110,7 @@ int main(int argc, char * argv[]) {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 
-  initShaders();
-  initTexture(argv[1], & widthTexture, & heightTexture);
-
-  window = glfwCreateWindow(600, 600, "CENG477 - HW3", NULL, NULL);
+  window = glfwCreateWindow(width, height, "CENG477 - HW3", NULL, NULL);
 
   if (!window) {
     glfwTerminate();
@@ -117,6 +126,8 @@ int main(int argc, char * argv[]) {
     exit(-1);
   }
 
+  initShaders();
+  initTexture(argv[1], & widthTexture, & heightTexture);
 
   vertices.resize(18*widthTexture*heightTexture); //SHOULD BE INITIALIZED
 
@@ -157,10 +168,9 @@ int main(int argc, char * argv[]) {
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
   glEnableVertexAttribArray(0);
 
-  glViewport(0, 0, widthTexture, heightTexture);
   glEnable(GL_DEPTH_TEST);
 
-  cameraPosition = glm::vec3((float)widthTexture/2, (float)widthTexture/10, -(float)widthTexture/4);
+  cameraPosition = glm::vec3((float)widthTexture/(float)2, (float)widthTexture/(float)10, -(float)widthTexture/(float)3);
   glm::mat4 view = glm::mat4(1.0f);
   glm::mat4 projection;
   projection = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 1000.0f);
@@ -185,6 +195,8 @@ int main(int argc, char * argv[]) {
 
     processInput(window);
 
+    glfwGetWindowSize(window, &width, &height);
+    glViewport(0, 0, width, height);
     cameraPosition += cameraGaze * cameraVelocity;
 
     glClear(GL_COLOR_BUFFER_BIT);
