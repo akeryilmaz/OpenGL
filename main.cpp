@@ -55,57 +55,37 @@ void processInput(GLFWwindow *window)
     pitch += 0.4;
     if (pitch>360) pitch = pitch-360.0f;
     glm::vec3 newGaze;
-    glm::vec3 newUp;
     newGaze.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
     newGaze.y = sin(glm::radians(pitch));
     newGaze.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
-    newUp.x = sin(glm::radians(pitch)) * cos(glm::radians(yaw));
-    newUp.y = cos(glm::radians(pitch));
-    newUp.z = sin(glm::radians(pitch)) * sin(glm::radians(yaw));
     cameraGaze = glm::normalize(newGaze);
-    cameraUp = glm::normalize(newUp);
   }
   if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS){
     pitch -= 0.4;
     if (pitch<0) pitch = pitch+360.0f;
     glm::vec3 newGaze;
-    glm::vec3 newUp;
     newGaze.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
     newGaze.y = sin(glm::radians(pitch));
     newGaze.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
-    newUp.x = sin(glm::radians(pitch)) * cos(glm::radians(yaw));
-    newUp.y = cos(glm::radians(pitch));
-    newUp.z = sin(glm::radians(pitch)) * sin(glm::radians(yaw));
     cameraGaze = glm::normalize(newGaze);
-    cameraUp = glm::normalize(newUp);
   }
   if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS){
     yaw += 0.4;
     if (yaw>360) yaw = yaw-360.0f;
     glm::vec3 newGaze;
-    glm::vec3 newUp;
     newGaze.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
     newGaze.y = sin(glm::radians(pitch));
     newGaze.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
-    newUp.x = sin(glm::radians(pitch)) * cos(glm::radians(yaw));
-    newUp.y = cos(glm::radians(pitch));
-    newUp.z = sin(glm::radians(pitch)) * sin(glm::radians(yaw));
     cameraGaze = glm::normalize(newGaze);
-    cameraUp = glm::normalize(newUp);
   }
   if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS){
     yaw -= 0.4;
     if (yaw<0) yaw = yaw+360.0f;
     glm::vec3 newGaze;
-    glm::vec3 newUp;
     newGaze.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
     newGaze.y = sin(glm::radians(pitch));
     newGaze.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
-    newUp.x = sin(glm::radians(pitch)) * cos(glm::radians(yaw));
-    newUp.y = cos(glm::radians(pitch));
-    newUp.z = sin(glm::radians(pitch)) * sin(glm::radians(yaw));
     cameraGaze = glm::normalize(newGaze);
-    cameraUp = glm::normalize(newUp);
   }
   if(glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS){
     GLFWmonitor* monitor = glfwGetWindowMonitor(window);
